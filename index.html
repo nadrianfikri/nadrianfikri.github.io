@@ -95,7 +95,7 @@
       <div class="container">
         <div class="row text-center mb-3">
           <div class="col">
-            <h2>Galery</h2>
+            <h2>My Galery</h2>
           </div>
         </div>
       </div>
@@ -157,27 +157,37 @@
     <section id="contact">
       <div class="container">
         <div class="row text-center">
-          <div class="col"><h2>Contact me</h2></div>
+          <div class="col mb-3"><h2>Contact me</h2></div>
         </div>
       </div>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <div class="mb-3">
-              <label for="name" class="form-label">Nama Lengkap</label>
-              <input type="text" class="form-control" id="name" />
+            <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+              <strong>Terima kasih!</strong> Pesan Kamu sudah kami terima :)
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" placeholder="name@gmail.com" />
-            </div>
-            <div class="mb-3">
-              <label for="text" class="form-label">Pesan</label>
-              <textarea class="form-control" id="text" rows="3"></textarea>
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-success mb-3">Kirim</button>
-            </div>
+
+            <form name="nad-contact-form">
+              <div class="mb-3">
+                <label for="name" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="name" name="nama" />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" />
+              </div>
+              <div class="mb-3">
+                <label for="text" class="form-label">Pesan</label>
+                <textarea class="form-control" id="text" rows="3" name="pesan"></textarea>
+              </div>
+              <button type="submit" class="btn btn-success btn-kirim">Kirim</button>
+
+              <button class="btn btn-success btn-loading d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -194,10 +204,37 @@
     <!-- Footer -->
     <footer class="text-center text-white bg-success">
       <p>Created with <i class="bi bi-suit-heart-fill text-warning"></i> by <a href="https://www.instagram.com/2nd.philo/" class="text-white fw-bold">Nadrian</a></p>
-      <h8>Instagram | Twitter | Quora | Github</h8>
+      <h4>Instagram | Twitter | Quora | Github</h4>
     </footer>
     <!-- Akhir footer -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbwt3n0zuUDFt_rOvEGt_w-3pVFp3_uXaQfzy7ICVcBXRsCeI6wDjfK5FKrcv6xCNCBCJQ/exec';
+      const form = document.forms['nad-contact-form'];
+
+      // ketika submit diklik maka tampilkan tombol loading dan hilangkan tombol kirim
+      const btnKirim = document.querySelector('.btn-kirim');
+      const btnLoading = document.querySelector('.btn-loading');
+      const myAlert = document.querySelector('.my-alert');
+
+      form.addEventListener('submit', (e) => {
+        btnLoading.classList.toggle('d-none');
+        btnKirim.classList.toggle('d-none');
+        e.preventDefault();
+        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+          .then((response) => {
+            //mengembalikan tombol setelah pesan terkirim
+            btnLoading.classList.toggle('d-none');
+            btnKirim.classList.toggle('d-none');
+            myAlert.classList.toggle('d-none');
+            form.reset();
+
+            console.log('Success!', response);
+          })
+          .catch((error) => console.error('Error!', error.message));
+      });
+    </script>
   </body>
 </html>
